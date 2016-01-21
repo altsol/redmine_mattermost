@@ -1,7 +1,7 @@
 # Mattermost chat plugin for Redmine
 
 This plugin posts updates to issues in your Redmine installation to a Mattermost
-channel.
+channel. Redmine Supported versions: 2.0.x - 3.1.x.
 
 ## Screenshot
 
