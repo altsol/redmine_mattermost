@@ -46,7 +46,7 @@ Step 2: Install this Redmine plugin for Mattermost.
 
 ![step2](https://raw.githubusercontent.com/altsol/redmine_mattermost/assets/step2.png)
 
-Step 3: Configure this Redmine plugin for Mattermost. For per-project customized routing, leave the `Mattermost Channel` field empty and follow the next steps, otherwise all Redmine projects will post to the same Mattermost channel.
+Step 3: Configure this Redmine plugin for Mattermost. For per-project customized routing, leave the `Mattermost Channel` field empty and follow the next steps, otherwise all Redmine projects will post to the same Mattermost channel. Be careful when filling the channel field, you need to input the channel's handle, not the display name visible to users. You can find each channel's handle by going inside the channel and click the down-arrow and selecting view info.
 
 ![step3](https://raw.githubusercontent.com/altsol/redmine_mattermost/assets/step3.png)
 
@@ -55,7 +55,7 @@ Step 4: For per-project customized routing, first create the project custom fiel
 ![step4a](https://raw.githubusercontent.com/altsol/redmine_mattermost/assets/step4a.png)
 ![step4b](https://raw.githubusercontent.com/altsol/redmine_mattermost/assets/step4b.png)
 
-Step 5: For per-project customized routing, configure the Mattermost channel inside your Redmine project.
+Step 5: For per-project customized routing, configure the Mattermost channel handle inside your Redmine project.
 
 ![step5](https://raw.githubusercontent.com/altsol/redmine_mattermost/assets/step5.png)
 
