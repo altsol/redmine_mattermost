@@ -3,7 +3,7 @@
 This plugin posts updates to issues in your Redmine installation to a Mattermost
 channel.
 
-Redmine Supported versions: 2.0.x - 3.1.x (3.2.x is not yet tested but should work).
+Redmine Supported versions: 2.0.x - 3.2.x.
 
 ## Screenshot
 
