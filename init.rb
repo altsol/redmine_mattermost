@@ -8,9 +8,9 @@ Redmine::Plugin.register :redmine_mattermost do
 	url 'https://github.com/altsol/redmine_mattermost'
 	author_url 'http://altsol.gr'
 	description 'Mattermost chat integration'
-	version '0.1'
+	version '0.2'
 
-	requires_redmine :version_or_higher => '0.8.0'
+	requires_redmine :version_or_higher => '2.0.0'
 
 	settings \
 		:default => {
