@@ -103,6 +103,29 @@ class MattermostListener < Redmine::Hook::Listener
 		speak msg, channel, attachment, url
 	end
 
+	def controller_wiki_edit_after_save(context = { })
+		return unless Setting.plugin_redmine_slack[:post_wiki_updates] == '1'
+
+		project = context[:project]
+		page = context[:page]
+
+		user = page.content.author
+		project_url = "<#{object_url project}|#{escape project}>"
+		page_url = "<#{object_url page}|#{page.title}>"
+		comment = "[#{project_url}] #{page_url} updated by *#{user}*"
+
+		channel = channel_for_project project
+		url = url_for_project project
+
+		attachment = nil
+		if not page.content.comments.empty?
+			attachment = {}
+			attachment[:text] = "#{escape page.content.comments}"
+		end
+
+		speak comment, channel, attachment, url
+	end
+
 	def speak(msg, channel, attachment=nil, url=nil)
 		url = Setting.plugin_redmine_mattermost[:mattermost_url] if not url
 		username = Setting.plugin_redmine_mattermost[:username]
