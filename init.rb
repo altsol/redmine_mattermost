@@ -8,7 +8,7 @@ Redmine::Plugin.register :redmine_mattermost do
 	url 'https://github.com/altsol/redmine_mattermost'
 	author_url 'http://altsol.gr'
 	description 'Mattermost chat integration'
-	version '0.2'
+	version '0.3'
 
 	requires_redmine :version_or_higher => '2.0.0'
 
@@ -21,4 +21,11 @@ Redmine::Plugin.register :redmine_mattermost do
 			'display_watchers' => 'no'
 		},
 		:partial => 'settings/mattermost_settings'
+end
+
+ActionDispatch::Callbacks.to_prepare do
+	require_dependency 'issue'
+	unless Issue.included_modules.include? RedmineMattermost::IssuePatch
+		Issue.send(:include, RedmineMattermost::IssuePatch)
+	end
 end

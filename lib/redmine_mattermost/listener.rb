@@ -1,7 +1,7 @@
 require 'httpclient'
 
 class MattermostListener < Redmine::Hook::Listener
-	def controller_issues_new_after_save(context={})
+	def redmine_mattermost_issues_new_after_save(context={})
 		issue = context[:issue]
 
 		channel = channel_for_project issue.project
@@ -37,7 +37,7 @@ class MattermostListener < Redmine::Hook::Listener
 		speak msg, channel, attachment, url
 	end
 
-	def controller_issues_edit_after_save(context={})
+	def redmine_mattermost_issues_edit_after_save(context={})
 		issue = context[:issue]
 		journal = context[:journal]
 
