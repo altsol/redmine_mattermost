@@ -104,7 +104,7 @@ class MattermostListener < Redmine::Hook::Listener
 	end
 
 	def controller_wiki_edit_after_save(context = { })
-		return unless Setting.plugin_redmine_slack[:post_wiki_updates] == '1'
+		return unless Setting.plugin_redmine_mattermost[:post_wiki_updates] == '1'
 
 		project = context[:project]
 		page = context[:page]
