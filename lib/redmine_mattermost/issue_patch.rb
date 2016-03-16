@@ -16,14 +16,12 @@ module RedmineMattermost
     
     module InstanceMethods
       def create_from_issue
-        self.reload
         @create_already_fired = true
         Redmine::Hook.call_hook(:redmine_mattermost_issues_new_after_save, { :issue => self})
         return true
       end
 
       def save_from_issue
-        self.reload
         if not @create_already_fired
           Redmine::Hook.call_hook(:redmine_mattermost_issues_edit_after_save, { :issue => self, :journal => self.current_journal}) unless self.current_journal.nil?
         end
