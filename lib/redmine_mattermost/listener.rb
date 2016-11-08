@@ -4,10 +4,10 @@ class MattermostListener < Redmine::Hook::Listener
 	def redmine_mattermost_issues_new_after_save(context={})
 		issue = context[:issue]
 
-		channel = channel_for_project issue.project
+		channels = channels_for_project issue.project
 		url = url_for_project issue.project
 
-		return unless channel and url
+		return unless channels.any? and url
 		return if issue.is_private?
 
 		msg = "[#{escape issue.project}] #{escape issue.author} created <#{object_url issue}|#{escape issue}>#{mentions issue.description}"
@@ -34,17 +34,17 @@ class MattermostListener < Redmine::Hook::Listener
 			:short => true
 		} if Setting.plugin_redmine_mattermost[:display_watchers] == 'yes'
 
-		speak msg, channel, attachment, url
+		speak msg, channels, attachment, url
 	end
 
 	def redmine_mattermost_issues_edit_after_save(context={})
 		issue = context[:issue]
 		journal = context[:journal]
 
-		channel = channel_for_project issue.project
+		channels = channels_for_project issue.project
 		url = url_for_project issue.project
 
-		return unless channel and url and Setting.plugin_redmine_mattermost[:post_updates] == '1'
+		return unless channels.any? and url and Setting.plugin_redmine_mattermost[:post_updates] == '1'
 		return if issue.is_private?
 		return if journal.private_notes?
 
@@ -54,7 +54,7 @@ class MattermostListener < Redmine::Hook::Listener
 		attachment[:text] = escape journal.notes if journal.notes
 		attachment[:fields] = journal.details.map { |d| detail_to_field d }
 
-		speak msg, channel, attachment, url
+		speak msg, channels, attachment, url
 	end
 
 	def model_changeset_scan_commit_for_issue_ids_pre_issue_update(context={})
@@ -62,10 +62,10 @@ class MattermostListener < Redmine::Hook::Listener
 		journal = issue.current_journal
 		changeset = context[:changeset]
 
-		channel = channel_for_project issue.project
+		channels = channels_for_project issue.project
 		url = url_for_project issue.project
 
-		return unless channel and url and issue.save
+		return unless channels.any? and url and issue.save
 		return if issue.is_private?
 
 		msg = "[#{escape issue.project}] #{escape journal.user.to_s} updated <#{object_url issue}|#{escape issue}>"
@@ -101,7 +101,7 @@ class MattermostListener < Redmine::Hook::Listener
 		attachment[:text] = ll(Setting.default_language, :text_status_changed_by_changeset, "<#{revision_url}|#{escape changeset.comments}>")
 		attachment[:fields] = journal.details.map { |d| detail_to_field d }
 
-		speak msg, channel, attachment, url
+		speak msg, channels, attachment, url
 	end
 
 	def controller_wiki_edit_after_save(context = { })
@@ -115,7 +115,7 @@ class MattermostListener < Redmine::Hook::Listener
 		page_url = "<#{object_url page}|#{page.title}>"
 		comment = "[#{project_url}] #{page_url} updated by *#{user}*"
 
-		channel = channel_for_project project
+		channels = channels_for_project project
 		url = url_for_project project
 
 		attachment = nil
@@ -124,10 +124,10 @@ class MattermostListener < Redmine::Hook::Listener
 			attachment[:text] = "#{escape page.content.comments}"
 		end
 
-		speak comment, channel, attachment, url
+		speak comment, channels, attachment, url
 	end
 
-	def speak(msg, channel, attachment=nil, url=nil)
+	def speak(msg, channels, attachment=nil, url=nil)
 		url = Setting.plugin_redmine_mattermost[:mattermost_url] if not url
 		username = Setting.plugin_redmine_mattermost[:username]
 		icon = Setting.plugin_redmine_mattermost[:icon]
@@ -138,7 +138,7 @@ class MattermostListener < Redmine::Hook::Listener
 		}
 
 		params[:username] = username if username
-		params[:channel] = channel if channel
+		
 
 		params[:attachments] = [attachment] if attachment
 
@@ -150,14 +150,18 @@ class MattermostListener < Redmine::Hook::Listener
 			end
 		end
 
-		begin
-			client = HTTPClient.new
-			client.ssl_config.cert_store.set_default_paths
-			client.ssl_config.ssl_version = :auto
-			client.post_async url, {:payload => params.to_json}
-		rescue Exception => e
-			logger.warn("cannot connect to #{url}")
-			logger.warn(e)
+		channels.each do |channel|
+			params[:channel] = channel
+
+			begin
+				client = HTTPClient.new
+				client.ssl_config.cert_store.set_default_paths
+				client.ssl_config.ssl_version = :auto
+				client.post_async url, {:payload => params.to_json}
+			rescue Exception => e
+				logger.warn("cannot connect to #{url}")
+				logger.warn(e)
+			end
 		end
 	end
 
@@ -187,20 +191,20 @@ private
 		].find{|v| v.present?}
 	end
 
-	def channel_for_project(proj)
+	def channels_for_project(proj)
 		return nil if proj.blank?
 
 		cf = ProjectCustomField.find_by_name("Mattermost Channel")
 
 		val = [
 			(proj.custom_value_for(cf).value rescue nil),
-			(channel_for_project proj.parent),
+			(channels_for_project proj.parent),
 			Setting.plugin_redmine_mattermost[:channel],
 		].find{|v| v.present?}
 
 		# Channel name '-' is reserved for NOT notifying
-		return nil if val.to_s == '-'
-		val
+		return [] if val.to_s == '-'
+		val.split(",")
 	end
 
 	def detail_to_field(detail)
