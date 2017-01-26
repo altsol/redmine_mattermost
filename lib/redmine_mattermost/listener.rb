@@ -202,7 +202,8 @@ private
 			Setting.plugin_redmine_mattermost[:channel],
 		].find{|v| v.present?}
 
-		# Channel name '-' is reserved for NOT notifying
+		# Channel name '-' or empty '' is reserved for NOT notifying
+		return [] if val.to_s == ''
 		return [] if val.to_s == '-'
 		val.split(",")
 	end
