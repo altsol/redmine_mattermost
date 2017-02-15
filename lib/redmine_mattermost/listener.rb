@@ -205,7 +205,8 @@ private
 		# Channel name '-' or empty '' is reserved for NOT notifying
 		return [] if val.to_s == ''
 		return [] if val.to_s == '-'
-		val.split(",")
+		return val.split(",") if val.is_a? String
+		val
 	end
 
 	def detail_to_field(detail)
