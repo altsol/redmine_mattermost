@@ -210,9 +210,12 @@ private
 	end
 
 	def detail_to_field(detail)
+		field_format = nil
+
 		if detail.property == "cf"
 			key = CustomField.find(detail.prop_key).name rescue nil
 			title = key
+			field_format = CustomField.find(detail.prop_key).field_format rescue nil
 		elsif detail.property == "attachment"
 			key = "attachment"
 			title = I18n.t :label_attachment
@@ -254,6 +257,12 @@ private
 		when "parent"
 			issue = Issue.find(detail.value) rescue nil
 			value = "<#{object_url issue}|#{escape issue}>" if issue
+		end
+
+		case field_format
+		when "version"
+			version = Version.find(detail.value) rescue nil
+			value = escape version.to_s
 		end
 
 		value = "-" if value.empty?
