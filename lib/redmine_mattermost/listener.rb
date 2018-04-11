@@ -202,9 +202,9 @@ private
 			Setting.plugin_redmine_mattermost[:channel],
 		].find{|v| v.present?}
 
-                # Change channel name to regular mattermost name (' ' -> '-' and all lowercase)
-                val = val.downcase!
-                val = val.split(' ').join('-') if val.include?(' ')
+		# Change channel name to regular mattermost name (' ' -> '-' and all lowercase)
+		val = val.downcase!
+		val = val.split(' ').join('-') if val.include?(' ')
 
 		# Channel name '-' or empty '' is reserved for NOT notifying
 		return [] if val.to_s == ''
