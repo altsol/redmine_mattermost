@@ -206,7 +206,6 @@ private
                 val = val.downcase!
                 val = val.split(' ').join('-') if val.include?(' ')
 
-
 		# Channel name '-' or empty '' is reserved for NOT notifying
 		return [] if val.to_s == ''
 		return [] if val.to_s == '-'
