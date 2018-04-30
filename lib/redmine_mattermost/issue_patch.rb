@@ -10,10 +10,10 @@ module RedmineMattermost
         after_save :save_from_issue
       end
     end
-    
+
     module ClassMethods
     end
-    
+
     module InstanceMethods
       def create_from_issue
         @create_already_fired = true
@@ -28,6 +28,6 @@ module RedmineMattermost
         return true
       end
 
-    end    
+    end
   end
 end

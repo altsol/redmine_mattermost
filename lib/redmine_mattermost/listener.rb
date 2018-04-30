@@ -32,7 +32,7 @@ class MattermostListener < Redmine::Hook::Listener
 			:title => I18n.t("field_watcher"),
 			:value => escape(issue.watcher_users.join(', ')),
 			:short => true
-		} if Setting.plugin_redmine_mattermost[:display_watchers] == 'yes'
+		} if Setting.plugin_redmine_mattermost["display_watchers"] == 'yes'
 
 		speak msg, channels, attachment, url
 	end
@@ -44,7 +44,7 @@ class MattermostListener < Redmine::Hook::Listener
 		channels = channels_for_project issue.project
 		url = url_for_project issue.project
 
-		return unless channels.any? and url and Setting.plugin_redmine_mattermost[:post_updates] == '1'
+		return unless channels.any? and url and Setting.plugin_redmine_mattermost["post_updates"] == '1'
 		return if issue.is_private?
 		return if journal.private_notes?
 
@@ -105,7 +105,7 @@ class MattermostListener < Redmine::Hook::Listener
 	end
 
 	def controller_wiki_edit_after_save(context = { })
-		return unless Setting.plugin_redmine_mattermost[:post_wiki_updates] == '1'
+		return unless Setting.plugin_redmine_mattermost["post_wiki_updates"] == '1'
 
 		project = context[:project]
 		page = context[:page]
@@ -128,9 +128,9 @@ class MattermostListener < Redmine::Hook::Listener
 	end
 
 	def speak(msg, channels, attachment=nil, url=nil)
-		url = Setting.plugin_redmine_mattermost[:mattermost_url] if not url
-		username = Setting.plugin_redmine_mattermost[:username]
-		icon = Setting.plugin_redmine_mattermost[:icon]
+		url = Setting.plugin_redmine_mattermost["mattermost_url"] if not url
+		username = Setting.plugin_redmine_mattermost["username"]
+		icon = Setting.plugin_redmine_mattermost["icon"]
 
 		params = {
 			:text => msg,
@@ -187,7 +187,7 @@ private
 		return [
 			(proj.custom_value_for(cf).value rescue nil),
 			(url_for_project proj.parent),
-			Setting.plugin_redmine_mattermost[:mattermost_url],
+			Setting.plugin_redmine_mattermost["mattermost_url"],
 		].find{|v| v.present?}
 	end
 
@@ -199,7 +199,7 @@ private
 		val = [
 			(proj.custom_value_for(cf).value rescue nil),
 			(channels_for_project proj.parent),
-			Setting.plugin_redmine_mattermost[:channel],
+			Setting.plugin_redmine_mattermost["channel"],
 		].find{|v| v.present?}
 
 		# Channel name '-' or empty '' is reserved for NOT notifying
