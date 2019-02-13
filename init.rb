@@ -23,7 +23,7 @@ Redmine::Plugin.register :redmine_mattermost do
 		:partial => 'settings/mattermost_settings'
 end
 
-ActionDispatch::Callbacks.to_prepare do
+ActiveSupport::Reloader.to_prepare do
 	require_dependency 'issue'
 	unless Issue.included_modules.include? RedmineMattermost::IssuePatch
 		Issue.send(:include, RedmineMattermost::IssuePatch)
