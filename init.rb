@@ -10,14 +10,6 @@ Redmine::Plugin.register :redmine_amazon_chime do
 	version '0.6'
 
 	requires_redmine :version_or_higher => '2.0.0'
-
-	settings \
-		:default => {
-			'callback_url' => 'http://example.com/callback/',
-			'username' => 'redmine',
-			'display_watchers' => 'no'
-		},
-		:partial => 'settings/amazon_chime_settings'
 end
 
 ActionDispatch::Callbacks.to_prepare do

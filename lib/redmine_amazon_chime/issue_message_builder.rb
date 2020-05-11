@@ -19,7 +19,7 @@ module RedmineAmazonChime
 				@msg_list
 				.append("[#{escape(@issue.project)}] #{escape(@issue.author)} created #{object_url(@issue)} #{escape(@issue.subject)}")
 				.append("priority: #{escape(@issue.priority)}")
-				.append("assinged to: #{escape(@issue.assinged_to) rescue ''}"
+				.append("assinged to: #{escape(@issue.assinged_to) rescue ''}")
 				.append("due date: #{@issue.due_date rescue ''}")
 				.append("description: #{escape(@issue.description) rescue ''}")
 			end
