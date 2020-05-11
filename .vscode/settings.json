@@ -1,0 +1,8 @@
+{
+    "ruby.intellisense": "rubyLocate",
+    "ruby.format": "standard",
+    "ruby.codeCompletion": "rcodetools",
+    "ruby.interpreter.commandPath": "C:\\Ruby26-x64\\bin",
+    "ruby.useBundler": true,
+    "ruby.pathToBundler": "C:\\Ruby26-x64\\bin"
+}
