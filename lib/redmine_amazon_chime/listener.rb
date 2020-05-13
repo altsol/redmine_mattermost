@@ -1,6 +1,6 @@
 module RedmineAmazonChime
 	class AmazonChimeListener < Redmine::Hook::Listener
-		def controller_issues_new_after_save(context={})
+		def redmine_amazon_chime_issues_new_after_save(context={})
 			chime_webhook = chime_webhook_for_project(context[:project])
 			if chime_webhook.present?
 				chime_message = ChimeMessage.new(context, chime_webhook)
@@ -8,7 +8,7 @@ module RedmineAmazonChime
 			end
 		end
 
-		def controller_issues_edit_after_save(context={})
+		def redmine_amazon_chime_issues_edit_after_save(context={})
 			chime_webhook = chime_webhook_for_project(context[:project])
 			if chime_webhook.present?
 				chime_message = ChimeMessage.new(context, chime_webhook)
