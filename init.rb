@@ -1,6 +1,6 @@
 require 'redmine'
 
-require_dependency 'redmine_amazon_chime/listener'
+require_dependency 'redmine_amazon_chime'
 
 Redmine::Plugin.register :redmine_amazon_chime do
 	name 'Redmine Amazon Chime'
