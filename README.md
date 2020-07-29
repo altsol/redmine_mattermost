@@ -3,7 +3,9 @@
 This plugin posts updates to issues in your Redmine installation to a Mattermost
 channel.
 
-Redmine Supported versions: 2.0.x - 3.3.x.
+Redmine Supported versions: 
+version 0.6 for Redmine versions: 4.0.x.
+version 0.5 for Redmine versions: 2.0.x - 3.3.x.
 
 ## Screenshot
 
