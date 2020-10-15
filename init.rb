@@ -1,7 +1,5 @@
 require 'redmine'
 
-require_dependency 'redmine_mattermost/listener'
-
 Redmine::Plugin.register :redmine_mattermost do
 	name 'Redmine Mattermost'
 	author 'AltSol'
@@ -24,6 +22,7 @@ Redmine::Plugin.register :redmine_mattermost do
 end
 
 ActiveSupport::Reloader.to_prepare do
+    require_dependency 'redmine_mattermost/listener'
 	require_dependency 'issue'
 	unless Issue.included_modules.include? RedmineMattermost::IssuePatch
 		Issue.send(:include, RedmineMattermost::IssuePatch)
