@@ -5,6 +5,8 @@ channel.
 
 Redmine Supported versions: 
 
+version 0.7 for Redmine versions: 5.x - 6.x.
+
 version 0.6 for Redmine versions: 4.0.x.
 
 version 0.5 for Redmine versions: 2.0.x - 3.3.x.
